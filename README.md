@@ -10,10 +10,10 @@ Also supports `AMSBound` variant of the above, equivalent to `AMSGrad` from Adam
 
 ```python
 AdaBound(lr=1e-03,
-         final_lr=adabound_final_lr,
-         gamma=adabound_gamma,
-         weight_decay=weight_decay,
-         amsbound=amsbound)
+         final_lr=0.1,
+         gamma=1e-03,
+         weight_decay=0.,
+         amsbound=False)
 ```
 
 ## Results
