@@ -9,11 +9,13 @@ Add the `adabound.py` script to your project, and import it. Can be a dropin rep
 Also supports `AMSBound` variant of the above, equivalent to `AMSGrad` from Adam.
 
 ```python
-AdaBound(lr=1e-03,
-         final_lr=0.1,
-         gamma=1e-03,
-         weight_decay=0.,
-         amsbound=False)
+from adabound import AdaBound
+
+optm = AdaBound(lr=1e-03,
+                final_lr=0.1,
+                gamma=1e-03,
+                weight_decay=0.,
+                amsbound=False)
 ```
 
 ## Results
