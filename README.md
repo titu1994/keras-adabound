@@ -25,6 +25,14 @@ With a small ResNet 20 and width + height data + horizontal flips data augmentat
 On a small ResNet 20 with only width and height data augmentations, with batchsize 1024 trained for 100 epochs, the model gets close to 86% on the test set (called v3 below).
 
 
+### Train Set Accuracy
+
+<img src="https://github.com/titu1994/keras-adabound/blob/master/images/train_acc.PNG?raw=true" height=50% width=100%>
+
+### Train Set Loss
+
+<img src="https://github.com/titu1994/keras-adabound/blob/master/images/train_loss.PNG?raw=true" height=50% width=100%>
+
 ### Test Set Accuracy
 
 <img src="https://github.com/titu1994/keras-adabound/blob/master/images/val_acc.PNG?raw=true" height=50% width=100%>
