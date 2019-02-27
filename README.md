@@ -18,9 +18,10 @@ AdaBound(lr=1e-03,
 
 ## Results
 
-On a small ResNet 20 with only width and height data augmentations, the model gets close to 86% on the test set (called v1 below).
+With a small ResNet 20 and width + height data + horizontal flips data augmentation, and 100 epochs of training with batchsize 1024, it hits 89.5% (called v1).
 
-With the addition of horizontal flips and finetuning for another 100 epochs, it hits 89.5% (called v3)
+On a small ResNet 20 with only width and height data augmentations, with batchsize 1024 trained for 100 epochs, the model gets close to 86% on the test set (called v3 below).
+
 
 ### Test Set Accuracy
 
