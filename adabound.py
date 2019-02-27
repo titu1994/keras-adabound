@@ -50,6 +50,7 @@ class AdaBound(Optimizer):
         self.initial_decay = decay
         self.amsbound = amsbound
         self.weight_decay = float(weight_decay)
+        self.base_lr = lr
 
     def get_updates(self, loss, params):
         grads = self.get_gradients(loss, params)
@@ -73,9 +74,9 @@ class AdaBound(Optimizer):
         self.weights = [self.iterations] + ms + vs + vhats
 
         # Applies bounds on actual learning rate
-        final_lr = self.final_lr * lr
-        lower_bound = final_lr * (1. - 1. / (self.gamma * lr_t + 1.))
-        upper_bound = final_lr * (1. + 1. / (self.gamma * lr_t))
+        final_lr = self.final_lr * lr / self.base_lr
+        lower_bound = final_lr * (1. - 1. / (self.gamma * t + 1.))
+        upper_bound = final_lr * (1. + 1. / (self.gamma * t))
 
         for p, g, m, v, vhat in zip(params, grads, ms, vs, vhats):
             # apply weight decay
