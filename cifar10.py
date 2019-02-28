@@ -86,12 +86,14 @@ def lr_schedule(epoch):
     """
     lr = 0.001
     epoch += 1
+
     # if epoch >= 90:
     #     lr *= 5e-2
     # elif epoch >= 60:
     #     lr *= 1e-1
     # elif epoch >= 30:
     #     lr *= 5e-1
+
     if epoch >= 150:
         lr *= 0.1
     print('Learning rate: ', lr)
@@ -121,7 +123,7 @@ filepath = os.path.join(save_dir, model_name)
 
 # Prepare callbacks for model saving and for learning rate adjustment.
 checkpoint = ModelCheckpoint(filepath=filepath,
-                             monitor='val_acc',
+                             monitor='loss',
                              verbose=1,
                              save_best_only=True,
                              save_weights_only=True)
