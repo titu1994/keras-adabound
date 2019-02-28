@@ -1,6 +1,7 @@
 import tensorflow as tf
-from keras.optimizers import Optimizer
 from keras import backend as K
+from keras.optimizers import Optimizer
+
 
 class AdaBound(Optimizer):
     """AdaBound optimizer.
@@ -49,8 +50,9 @@ class AdaBound(Optimizer):
         self.epsilon = epsilon
         self.initial_decay = decay
         self.amsbound = amsbound
+
         self.weight_decay = float(weight_decay)
-        self.base_lr = lr
+        self.base_lr = float(lr)
 
     def get_updates(self, loss, params):
         grads = self.get_gradients(loss, params)
@@ -62,8 +64,14 @@ class AdaBound(Optimizer):
                                                       K.dtype(self.decay))))
 
         t = K.cast(self.iterations, K.floatx()) + 1
-        lr_t = lr * (K.sqrt(1. - K.pow(self.beta_2, t)) /
-                     (1. - K.pow(self.beta_1, t)))
+
+        # Applies bounds on actual learning rate
+        step_size = lr * (K.sqrt(1. - K.pow(self.beta_2, t)) /
+                          (1. - K.pow(self.beta_1, t)))
+
+        final_lr = self.final_lr * lr / self.base_lr
+        lower_bound = final_lr * (1. - 1. / (self.gamma * t + 1.))
+        upper_bound = final_lr * (1. + 1. / (self.gamma * t))
 
         ms = [K.zeros(K.int_shape(p), dtype=K.dtype(p)) for p in params]
         vs = [K.zeros(K.int_shape(p), dtype=K.dtype(p)) for p in params]
@@ -72,11 +80,6 @@ class AdaBound(Optimizer):
         else:
             vhats = [K.zeros(1) for _ in params]
         self.weights = [self.iterations] + ms + vs + vhats
-
-        # Applies bounds on actual learning rate
-        final_lr = self.final_lr * lr / self.base_lr
-        lower_bound = final_lr * (1. - 1. / (self.gamma * t + 1.))
-        upper_bound = final_lr * (1. + 1. / (self.gamma * t))
 
         for p, g, m, v, vhat in zip(params, grads, ms, vs, vhats):
             # apply weight decay
@@ -93,8 +96,11 @@ class AdaBound(Optimizer):
             else:
                 denom = (K.sqrt(v_t) + self.epsilon)
 
-            lr_t_bound = lr_t / denom
-            bounded_lr_t = m_t * tf.clip_by_value(lr_t_bound,
+            # Compute the bounds
+            step_size_p = step_size * K.ones_like(denom)
+            step_size_p_bound = step_size_p / denom
+            # TODO: Replace with K.clip after releast of Keras > 2.2.4
+            bounded_lr_t = m_t * tf.clip_by_value(step_size_p_bound,
                                                   lower_bound,
                                                   upper_bound)
 
