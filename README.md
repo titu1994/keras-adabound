@@ -26,6 +26,8 @@ With a small ResNet 20 and width + height data + horizontal flips data augmentat
 
 On a small ResNet 20 with only width and height data augmentations, with batchsize 1024 trained for 100 epochs, the model gets close to 86% on the test set (called v3 below).
 
+### NOTE: The smaller ResNet 20 models have been removed as they did not perform as expected and were depending on a flaw during the initial implementation. The ResNet 32 shows the actual performance of this optimizer.
+
 
 ### Train Set Accuracy
 
