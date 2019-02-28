@@ -20,6 +20,8 @@ optm = AdaBound(lr=1e-03,
 
 ## Results
 
+With a wide ResNet 34 and horizontal flips data augmentation, and 100 epochs of training with batchsize 128, it hits 92.16% (called v1).
+
 With a small ResNet 20 and width + height data + horizontal flips data augmentation, and 100 epochs of training with batchsize 1024, it hits 89.5% (called v1).
 
 On a small ResNet 20 with only width and height data augmentations, with batchsize 1024 trained for 100 epochs, the model gets close to 86% on the test set (called v3 below).
@@ -43,9 +45,7 @@ On a small ResNet 20 with only width and height data augmentations, with batchsi
 
 # Issue with clipping
 
-For performance reasons, this currently works only on Tensorflow backend. Keras offers a `K.clip` function in its generic backend, but for some reason requires that the clipping values be only python floating point numbers, whereas Tensorflow can accept Tensors without an issue.
-
-The values for these _can_ be read using `K.eval`, however this incurs a drastic performance cost, especially for the Optimizer which is called every batch for updates in a loop for every variable.
+Currently dependent on Tensorflow backend for `tf.clip_by_value`. Will be backend independent after next release of Keras.
 
 # Requirements
 - Keras 2.2.4+ & Tensorflow 1.12+ (Only supports TF backend for now).
