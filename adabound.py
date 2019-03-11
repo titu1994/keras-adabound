@@ -16,8 +16,11 @@ class AdaBound(Optimizer):
         gamma: float >= 0. Convergence speed of the bound function.
         epsilon: float >= 0. Fuzz factor. If `None`, defaults to `K.epsilon()`.
         decay: float >= 0. Learning rate decay over each update.
+        weight_decay: Weight decay weight.
         amsbound: boolean. Whether to apply the AMSBound variant of this
             algorithm.
+        iterations: Current iteration of training. Used for correct retraining.
+            Need not be explicitly set.
 
     # References
         - [Adaptive Gradient Methods with Dynamic Bound of Learning Rate]
@@ -29,17 +32,14 @@ class AdaBound(Optimizer):
     """
 
     def __init__(self, lr=0.001, final_lr=0.1, beta_1=0.9, beta_2=0.999, gamma=1e-3,
-                 epsilon=None, decay=0., amsbound=False, weight_decay=0.0, **kwargs):
+                 epsilon=None, decay=0., amsbound=False, weight_decay=0.0, iterations=None,
+                 **kwargs):
         super(AdaBound, self).__init__(**kwargs)
 
         if not 0. <= gamma <= 1.:
             raise ValueError("Invalid `gamma` parameter. Must lie in [0, 1] range.")
 
-        if 'iterations' in kwargs:
-            iterations = kwargs['iterations']
-
-        else:
-            iterations = 0
+        iterations = int(iterations) if iterations is not None else 0
 
         with K.name_scope(self.__class__.__name__):
             self.iterations = K.variable(iterations, dtype='int64', name='iterations')
@@ -133,6 +133,6 @@ class AdaBound(Optimizer):
                   'epsilon': self.epsilon,
                   'weight_decay': self.weight_decay,
                   'amsbound': self.amsbound,
-                  'iterations': float(K.get_value(self.iterations))}
+                  'iterations': int(K.get_value(self.iterations))}
         base_config = super(AdaBound, self).get_config()
         return dict(list(base_config.items()) + list(config.items()))
