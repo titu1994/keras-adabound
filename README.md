@@ -48,10 +48,6 @@ Weights are available inside the [Releases tab](https://github.com/titu1994/kera
 
 <img src="https://github.com/titu1994/keras-adabound/blob/master/images/val_loss.PNG?raw=true" height=50% width=100%>
 
-# Issue with clipping
-
-Currently dependent on Tensorflow backend for `tf.clip_by_value`. Will be backend independent after next release of Keras.
-
 # Requirements
 - Keras 2.2.4+ & Tensorflow 1.12+ (Only supports TF backend for now).
 - Numpy

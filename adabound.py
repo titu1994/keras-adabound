@@ -1,4 +1,3 @@
-import tensorflow as tf
 from keras import backend as K
 from keras.optimizers import Optimizer
 
@@ -100,10 +99,8 @@ class AdaBound(Optimizer):
             # Compute the bounds
             step_size_p = step_size * K.ones_like(denom)
             step_size_p_bound = step_size_p / denom
-            # TODO: Replace with K.clip after releast of Keras > 2.2.4
-            bounded_lr_t = m_t * tf.clip_by_value(step_size_p_bound,
-                                                  lower_bound,
-                                                  upper_bound)
+            bounded_lr_t = m_t * K.minimum(K.maximum(step_size_p_bound,
+                                                     lower_bound), upper_bound)
 
             p_t = p - bounded_lr_t
 
