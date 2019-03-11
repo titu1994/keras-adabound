@@ -32,17 +32,14 @@ class AdaBound(Optimizer):
     """
 
     def __init__(self, lr=0.001, final_lr=0.1, beta_1=0.9, beta_2=0.999, gamma=1e-3,
-                 epsilon=None, decay=0., amsbound=False, weight_decay=0.0, iterations=None,
-                 **kwargs):
+                 epsilon=None, decay=0., amsbound=False, weight_decay=0.0, **kwargs):
         super(AdaBound, self).__init__(**kwargs)
 
         if not 0. <= gamma <= 1.:
             raise ValueError("Invalid `gamma` parameter. Must lie in [0, 1] range.")
 
-        iterations = int(iterations) if iterations is not None else 0
-
         with K.name_scope(self.__class__.__name__):
-            self.iterations = K.variable(iterations, dtype='int64', name='iterations')
+            self.iterations = K.variable(0, dtype='int64', name='iterations')
             self.lr = K.variable(lr, name='lr')
             self.beta_1 = K.variable(beta_1, name='beta_1')
             self.beta_2 = K.variable(beta_2, name='beta_2')
@@ -132,7 +129,6 @@ class AdaBound(Optimizer):
                   'decay': float(K.get_value(self.decay)),
                   'epsilon': self.epsilon,
                   'weight_decay': self.weight_decay,
-                  'amsbound': self.amsbound,
-                  'iterations': int(K.get_value(self.iterations))}
+                  'amsbound': self.amsbound}
         base_config = super(AdaBound, self).get_config()
         return dict(list(base_config.items()) + list(config.items()))
