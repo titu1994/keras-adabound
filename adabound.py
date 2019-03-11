@@ -19,8 +19,6 @@ class AdaBound(Optimizer):
         weight_decay: Weight decay weight.
         amsbound: boolean. Whether to apply the AMSBound variant of this
             algorithm.
-        iterations: Current iteration of training. Used for correct retraining.
-            Need not be explicitly set.
 
     # References
         - [Adaptive Gradient Methods with Dynamic Bound of Learning Rate]
