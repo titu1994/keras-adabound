@@ -131,7 +131,7 @@ checkpoint = ModelCheckpoint(filepath=filepath,
 lr_scheduler = LearningRateScheduler(lr_schedule)
 
 
-log_path = 'logs/%s' % (filepath[:-3])
+log_path = 'logs/%s' % (model_name[:-3])
 tensorboard = TensorBoard(log_path, update_freq='batch')
 
 callbacks = [checkpoint, lr_scheduler, tensorboard]
